@@ -56,6 +56,7 @@ deploy-cre-oracle-base :; [ -f .env ] && set -a && source .env && set +a; forge 
 # Dry run:  make cancel-clf-subscription-dry SENDER=0x9036464e4ecd2d40d21ee38a0398aedd6805a09b
 # Real run: make cancel-clf-subscription PRIVATE_KEY=0x...
 cancel-clf-subscription-dry :; forge script script/CancelCLFSubscription.s.sol --rpc-url https://mainnet.base.org -vvv
-cancel-clf-subscription :; [ -f .env ] && set -a && source .env && set +a; forge script script/CancelCLFSubscription.s.sol --rpc-url https://mainnet.base.org --broadcast -vvv
+# NOTE: --slow is required for EIP-7702 delegated EOAs (Base nodes allow only 1 in-flight tx per delegated account)
+cancel-clf-subscription :; [ -f .env ] && set -a && source .env && set +a; forge script script/CancelCLFSubscription.s.sol --rpc-url https://mainnet.base.org --broadcast --slow -vvv
 fix-contest-0   :; [ -f .env ] && set -a && source .env && set +a; npx hardhat run scripts/fix_contest_0.ts --network base
 test-oracle-fix :; forge test --match-contract GameScoreOracleSortTest -vvv
